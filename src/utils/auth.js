@@ -1,9 +1,9 @@
 /*
     认证相关工具类*/
 
-import Cookies from 'js' //安装： npm install --save js-cookie
+import Cookies from 'js-cookie' //安装： npm install --save js-cookie
 
-import Config from '@settings'
+import Config from '@/settings'
 
 const tokenKey = Config.tokenKey
 
