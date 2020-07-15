@@ -16,12 +16,13 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {   //这里
   modules[moduleName] = value.default
   return modules
 }, {})
-
 //实例化Vuex
 const store = new Vuex.Store({
-  modules,
-  getters
-})
+  modules: modules,
+  getters: {
 
+    roles: state => state.user.roles
+  }
+})
 //导出
 export default store

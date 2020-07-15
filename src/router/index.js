@@ -9,7 +9,7 @@ import 'nprogress/nprogress.css'    //进度条样式
 import router from './routers'    //导入路由
 import Config from '@/settings'   //导入全局配置
 import {getToken} from "../utils/auth"; //导入获取token方法
-import store from "../store";   //导入vuex
+import Store from "../store";   //导入vuex
 import {buildMenus} from "../api/system/menu";
 import { filterAsyncRouter } from '@/store/modules/permission'
 
@@ -29,27 +29,31 @@ router.beforeEach((to, from, next) => {
       next({path: '/'})   //进入主页
       NProgress.done()
     }else {
-      if (store.getters.roles.length === 0) { //如果还未拉取到用户信息
-        store.dispatch('GetInfo').then(res => {   //调用store的action异步拉取用户信息
+      if (Store.getters.roles.length === 0) { //如果还未拉取到用户信息
+        Store.dispatch('GetInfo').then(res => {   //调用store的action异步拉取用户信息
           //动态路由，拉取菜单
           loadMenus(next, to)
         }).catch(err => {
-          store.dispatch('LogOut').then(() => {
+          Store.dispatch('LogOut').then(() => {
             location.reload()
           })
         })
-      }else if (store.getters.loadMenus) {
+      }else if (Store.getters.loadMenus) {
         // 修改成false，防止死循环
-        store.dispatch('updateLoadMenus').then(res => {})
+        Store.dispatch('updateLoadMenus').then(res => {})
         loadMenus(next, to)
       } else {
         next()
       }
     }
-  } else {
+  } else {    //没有token时
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
-      next()
+      console.log('from.path -------- ' + from.path)
+      console.log('to.path +++++++++++' + to.path)
+      next()    //如果已经重定向到登录页就放行
     } else {
+      console.log(`++++++++++++++++++redirect=${from.fullPath}`)
+      console.log(`++++++++++++++++++redirect=${to.fullPath}`)
       next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
       NProgress.done()
     }

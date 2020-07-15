@@ -12,17 +12,34 @@ Vue.use(Router)
 
 //导出路由数组
 export const constantRouterMap = [  //按照顺序加载，首先进入登录页
+  { path: '/login',
+    meta: { title: '登录', noCache: true },
+    component: (resolve) => require(['@/views/Login'], resolve),
+    hidden: true
+  },
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component: (resolve) => require(['@/views/features/redirect'], resolve)
+      }
+    ]
+  },
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-
-  },
-  {
-    path: '/login',
-    meta: {title: '登录', noCache: true},
-    component: (resolve)=> require(['@/views/Login'], resolve),
-    hidden: true
+    children: [
+      {
+        path: 'dashboard',
+        component: (resolve) => require(['@/views/Home'], resolve),
+        name: 'Dashboard',
+        meta: { title: '首页', icon: 'index', affix: true, noCache: true }
+      }
+    ]
   }
 ]
 

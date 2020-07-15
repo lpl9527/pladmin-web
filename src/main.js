@@ -9,7 +9,7 @@ Vue.config.productionTip = false
 import './router'   //导入router权限控制
 
 new Vue({
-  render: h => h(App),  //h表示createElement()方法
   router,
-  store
+  store,
+  render: h => h(App)  //h表示createElement()方法
 }).$mount('#app')
