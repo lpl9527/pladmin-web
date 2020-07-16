@@ -52,8 +52,8 @@ router.beforeEach((to, from, next) => {
       console.log('to.path +++++++++++' + to.path)
       next()    //如果已经重定向到登录页就放行
     } else {
-      console.log(`++++++++++++++++++redirect=${from.fullPath}`)
-      console.log(`++++++++++++++++++redirect=${to.fullPath}`)
+      console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
+      console.log(`++++++++++++++++++to redirect=${to.fullPath}`)
       next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
       NProgress.done()
     }

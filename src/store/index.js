@@ -19,10 +19,7 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {   //这里
 //实例化Vuex
 const store = new Vuex.Store({
   modules: modules,
-  getters: {
-
-    roles: state => state.user.roles
-  }
+  getters: getters
 })
 //导出
 export default store
