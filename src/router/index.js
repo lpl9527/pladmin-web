@@ -48,12 +48,12 @@ router.beforeEach((to, from, next) => {
     }
   } else {    //没有token时
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
-      console.log('from.path -------- ' + from.path)
-      console.log('to.path +++++++++++' + to.path)
+      //console.log('from.path -------- ' + from.path)
+      //console.log('to.path +++++++++++' + to.path)
       next()    //如果已经重定向到登录页就放行
     } else {
-      console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
-      console.log(`++++++++++++++++++to redirect=${to.fullPath}`)
+      //console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
+      //console.log(`++++++++++++++++++to redirect=${to.fullPath}`)
       next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
       NProgress.done()
     }
