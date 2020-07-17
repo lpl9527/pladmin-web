@@ -4,10 +4,10 @@
     <!--vue的ref属性用于给元素或者子组件注册引用信息，这样就可以通过$refs.名称来对dom进行引用-->
     <!--:model用于实现数据的双向绑定-->
     <!--:roles用于指定表单的验证规则-->
-    <el-form ref="loginForm" :model="loginForm" :role="loginRules" class="login-form" label-position="left" label-width="0px">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" label-position="left" label-width="0px">
       <h3 class="title">ADMIN-SYSTEM 后台管理系统</h3>
       <el-form-item prop="username">
-        <el-input class="el-input" v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
+        <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <!--这里使用了vue的Svg Icon图标，在@/icons/svg中的图标只需在svg-icon标签的icon-class属性指定图标名称即可引入-->
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
@@ -48,16 +48,17 @@
 <script>
 
   import Background from '@/assets/images/background.jpg'   //引入背景图片
+  import {getCodeImg} from "../api/login";    //引入获取验证码图片api
 
-	export default {
+  export default {
 		name: "login",
     data() {
 		  return {
         Background: Background,   //背景图片引用
         codeUrl: '',
         loginForm: {      //表单数据双向绑定
-          username: '',
-          password: '',
+          username: 'admin',
+          password: '111111',
           rememberMe: false,
           code: '',
           uuid: ''
@@ -76,8 +77,11 @@
       }
     },
     methods: {
-		  getCode() {
-		    console.log('获取验证码！')
+		  getCode() {   //获取验证码图片地址
+		    /*getCodeImg().then(res => {
+		      this.codeUrl = res.img    //获取图片
+          this.loginForm.uuid = res.uuid  //获取uuid
+        })*/
       },
 		  handleLogin() {
 		    console.log("登录！")
@@ -86,7 +90,7 @@
 	}
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss">
   .login {
     display: flex;
     justify-content: center;
@@ -99,28 +103,35 @@
     text-align: center;
     color: #707070;
   }
+
   .login-form {
     border-radius: 6px;
     background: #ffffff;
     width: 385px;
     padding: 25px 25px 5px 25px;
+    .el-input {
+      height: 38px;
+      input {
+        height: 38px;
+      }
+    }
+    .input-icon{
+      height: 39px;width: 14px;margin-left: 2px;
+    }
   }
-  .el-input {
-    height: 38px;
+  .login-tip {
+    font-size: 13px;
+    text-align: center;
+    color: #bfbfbf;
   }
-  .input-icon{
-    height: 39px;width: 14px;margin-left: 2px;
-  }
-
   .login-code {
     width: 33%;
     display: inline-block;
     height: 38px;
     float: right;
+    img{
+      cursor: pointer;
+      vertical-align:middle
+    }
   }
-  .login-code img{
-    cursor: pointer;
-    vertical-align:middle
-  }
-
 </style>
