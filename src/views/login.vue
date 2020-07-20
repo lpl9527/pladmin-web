@@ -5,7 +5,7 @@
     <!--:model用于实现数据的双向绑定-->
     <!--:roles用于指定表单的验证规则-->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" label-position="left" label-width="0px">
-      <h3 class="title">ADMIN-SYSTEM 后台管理系统</h3>
+      <h3 class="title">PL-ADMIN 后台管理系统</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <!--这里使用了vue的Svg Icon图标，在@/icons/svg中的图标只需在svg-icon标签的icon-class属性指定图标名称即可引入-->
@@ -48,7 +48,7 @@
 <script>
 
   import Background from '@/assets/images/background.jpg'   //引入背景图片
-  import {getCodeImg} from "../api/login";    //引入获取验证码图片api
+  import { getCodeImg } from '@/api/login'    //引入获取验证码图片api
 
   export default {
 		name: "login",
@@ -76,12 +76,16 @@
         redirect: undefined
       }
     },
+    created() {   //组件创建完成时执行
+		  //获取验证码
+      this.getCode()
+    },
     methods: {
 		  getCode() {   //获取验证码图片地址
-		    /*getCodeImg().then(res => {
+		    getCodeImg().then(res => {
 		      this.codeUrl = res.img    //获取图片
           this.loginForm.uuid = res.uuid  //获取uuid
-        })*/
+        })
       },
 		  handleLogin() {
 		    console.log("登录！")

@@ -12,7 +12,8 @@ import router from '@/router/routers'
 
 //创建axios实例
 const request = axios.create({    //设置基础选项
-  baseURL: process.env.ENV === 'production' ? process.env.VUE_APP_BASE_API :'/',  //api的baseUrl
+  //baseURL: process.env.ENV === 'production' ? process.env.VUE_APP_BASE_API :'/',  //api的baseUrl
+  baseURL: 'http://localhost:8000',
   timeout: Config.timeout    //设置超时时间
 })
 
@@ -39,7 +40,7 @@ request.interceptors.response.use(response => {
     })
     return Promise.reject('发生错误！')
   }else {
-    response.data
+    return response.data
   }
 }, error=> {
   let code = 0
@@ -56,11 +57,11 @@ request.interceptors.response.use(response => {
   }
   if (code) {
     if (code === 401) {
-      store.dispatch('LogOut').then(() => {
+      /*store.dispatch('LogOut').then(() => {
         //用户登录界面提示
         Cookies.set('point', 401)
         location.reload()
-      })
+      })*/
     }else if(code === 403) {
       router.push({path: '/401'})
     }else {

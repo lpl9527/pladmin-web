@@ -41,7 +41,7 @@ export function getInfo() {
  */
 export function getCodeImg() {
   return request({
-    url: 'auth/info',
+    url: 'auth/code',
     method: 'get'
   })
 }
