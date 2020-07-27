@@ -49,6 +49,9 @@
 
   import Background from '@/assets/images/background.jpg'   //引入背景图片
   import { getCodeImg } from '@/api/login'    //引入获取验证码图片api
+  import {encrypt} from "../utils/rsaEncrypt";  //导入RSA加密函数
+  import Config from '@/settings'   //导入全局设置
+  import Cookies from 'js-cookie'   //导入Cookie
 
   export default {
 		name: "login",
@@ -56,9 +59,10 @@
 		  return {
         Background: Background,   //背景图片引用
         codeUrl: '',
+        cookiePass: '',   //Cookie中加密后的密码
         loginForm: {      //表单数据双向绑定
-          username: 'admin',
-          password: '111111',
+          username: '',
+          password: '',
           rememberMe: false,
           code: '',
           uuid: ''
@@ -76,19 +80,93 @@
         redirect: undefined
       }
     },
+    watch: {
+      $route: {
+        handler: function(route) {
+          this.redirect = route.query && route.query.redirect
+        },
+        immediate: true
+      }
+    },
     created() {   //组件创建完成时执行
 		  //获取验证码
       this.getCode()
+      //获取用户名、密码等Cookie信息，初始化登录表单数据
+      this.getCookie()
+      //token过期时提示
+      this.point()
     },
     methods: {
-		  getCode() {   //获取验证码图片地址
+		  getCode() {   //获取验证码图片
 		    getCodeImg().then(res => {
 		      this.codeUrl = res.img    //获取图片
-          this.loginForm.uuid = res.uuid  //获取uuid
+          this.loginForm.uuid = res.uuid  //获取uuid（验证码在redis中的key）
         })
       },
-		  handleLogin() {
-		    console.log("登录！")
+      getCookie() { //获取Cookie中的用户信息
+        const username = Cookies.get('username')
+        let password = Cookies.get('password')
+        const rememberMe = Cookies.get('rememberMe')
+        this.cookiePass = password === undefined ? '' : password
+
+        //如果Cookie中没有用户信息，则获取表单输入的用户密码
+        password = password === undefined ? this.loginForm.password : password
+        this.loginForm ={
+          username: username === undefined ? this.loginForm.username : username,
+          password: password,
+          rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
+          code: ''
+        }
+      },
+		  handleLogin() {   //登录逻辑
+		    this.$refs.loginForm.validate(valid => {
+		      const user = {
+		        username: this.loginForm.username,
+            password: this.loginForm.password,
+            rememberMe: this.loginForm.rememberMe,
+            code: this.loginForm.code,
+            uuid: this.loginForm.uuid
+          }
+          //如果密码与Cookie中密码不同，将当前密码RSA非对称加密处理
+          if (user.password !== this.cookiePass) {
+            user.password = encrypt(user.password)
+          }
+          if (valid){
+            this.loading = true   //表单提交阶段显示登陆中...
+            //如果选择了记住用户，则将用户信息放入Cookie
+            if (user.rememberMe){
+              Cookies.set('username', user.username, {expires: Config.passCookieExpires})
+              Cookies.set('password', user.password, {expires: Config.passCookieExpires})
+              Cookies.set('rememberMe', user.rememberMe, {expires: Config.passCookieExpires})
+            }else { //否则移除用户信息
+              Cookies.remove('username')
+              Cookies.remove('password')
+              Cookies.remove('rememberMe')
+            }
+            this.$store.dispatch('Login', user).then(() => {
+              this.loading = false
+              this.$router.push({path: this.redirect || '/'})
+            }).catch(() => {
+              this.loading = false
+              this.getCode()  //登录失败后重新加载验证码
+            })
+
+          }else {   //表单验证未通过
+            return false
+          }
+        })
+      },
+      point() {   //登录状态过期提示
+		    const point = Cookies.get('point') !== undefined
+        if (point) {
+          this.$notify({
+            title: '提示',
+            message: '当前登录状态已过期，请重新登录！',
+            type: 'warning',
+            duration: 8000
+          })
+          Cookies.remove('point')
+        }
       }
     }
 	}
