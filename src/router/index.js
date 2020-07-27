@@ -24,20 +24,21 @@ router.beforeEach((to, from, next) => {
   }
   NProgress.start()
   if(getToken()) {
+
     //已登录，且要跳转的页面是登录页
     if (to.path === '/login'){
       next({path: '/'})   //进入主页
       NProgress.done()
     }else {
       if (Store.getters.roles.length === 0) { //如果还未拉取到用户信息
-        Store.dispatch('GetInfo').then(res => {   //调用store的action异步拉取用户信息
+        /*Store.dispatch('GetInfo').then(res => {   //调用store的action异步拉取用户信息
           //动态路由，拉取菜单
           loadMenus(next, to)
         }).catch(err => {
           Store.dispatch('LogOut').then(() => {
             location.reload()
           })
-        })
+        })*/
       }else if (Store.getters.loadMenus) {
         // 修改成false，防止死循环
         Store.dispatch('updateLoadMenus').then(res => {})
@@ -52,8 +53,8 @@ router.beforeEach((to, from, next) => {
       //console.log('to.path +++++++++++' + to.path)
       next()    //如果已经重定向到登录页就放行
     } else {
-      //console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
-      //console.log(`++++++++++++++++++to redirect=${to.fullPath}`)
+      console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
+      console.log(`++++++++++++++++++to redirect=${to.fullPath}`)
       next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
       NProgress.done()
     }

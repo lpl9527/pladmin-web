@@ -5,7 +5,7 @@ module.exports = {
   /**
    *  网站标题
    */
-  title:  'ADMIN-SYSTEM',
+  title:  'PL-ADMIN',
   /**
    * 是否显示tagsView
    */
