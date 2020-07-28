@@ -57,11 +57,11 @@ request.interceptors.response.use(response => {
   }
   if (code) {
     if (code === 401) {
-      /*store.dispatch('LogOut').then(() => {
-        //用户登录界面提示
+      store.dispatch('LogOut').then(() => {
+        //用户登录界面提示，当登出时Cookie中设置point表示无访问权限
         Cookies.set('point', 401)
         location.reload()
-      })*/
+      })
     }else if(code === 403) {
       router.push({path: '/401'})
     }else {

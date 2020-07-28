@@ -10,7 +10,7 @@ const user = {
     user: {},
     roles: [],
     loadMenus: false  //第一次加载菜单时用到
-  }/*,
+  },
   mutations: {    //更改store中state值的唯一方法就是提交mutation。每个mutation都有一个字符串的事件类型(type)和一个回调函数(handler)。这个回调函数就是我们实际进行状态更改的地方，并且它会接受state作为第一个参数。
     SET_TOKEN: (state, token) => {
       state.token = token
@@ -30,7 +30,8 @@ const user = {
     Login({commit}, userInfo) {
       const rememberMe = userInfo.rememberMe
       return new Promise((resolve, reject) => {
-        login(userInfo.username, suerInfo.password, userInfo.code, userInfo.uuid).then(res => {
+        login(userInfo.username, userInfo.password, userInfo.code, userInfo.uuid).then(res => {
+          //登录成功设置token
           setToken(res.token, rememberMe)
           commit('SET_TOKEN', res.token)    //登录成功，将token放入state
           setUserInfo(res.user, commit)
@@ -72,10 +73,10 @@ const user = {
       })
     }
 
-  }*/
+  }
 }
 
-/*//登出时清空state中token和角色信息，清除token
+//登出时清空state中token和角色信息，清除token
 export const logOut = (commit) => {
   commit('SET_TOKEN', '')
   commit('SET_ROLES', [])
@@ -91,6 +92,6 @@ export const setUserInfo = (res, commit) => {
     commit('SET_ROLES', res.roles)
   }
   commit('SET_USER', res.user)
-}*/
+}
 
 export default user
