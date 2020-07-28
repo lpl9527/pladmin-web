@@ -145,7 +145,9 @@
             }
             this.$store.dispatch('Login', user).then(() => {
               this.loading = false
-              this.$router.push({path: this.redirect || '/'})
+              console.log('11111111111111')
+              this.$router.push({path: this.redirect || '/'}, onComplete => {}, onAbort => {})
+              console.log('222222222222')
             }).catch(() => {
               this.loading = false
               this.getCode()  //登录失败后重新加载验证码

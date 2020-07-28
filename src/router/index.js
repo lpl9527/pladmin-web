@@ -41,14 +41,16 @@ router.beforeEach((to, from, next) => {
           })
         })*/
       }else if (Store.getters.loadMenus) {
-        // 修改成false，防止死循环
+        // 通过转发到user.js的action并提交修改加载菜单请求为false，防止死循环
         Store.dispatch('updateLoadMenus').then(res => {})
+        //加载菜单
         loadMenus(next, to)
       } else {
         next()
       }
     }
   } else {    //没有token时
+    console.log('++++++++++++++++')
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       //console.log('from.path -------- ' + from.path)
       //console.log('to.path +++++++++++' + to.path)
@@ -62,9 +64,10 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+//从后台获取用户下的菜单
 export const loadMenus = (next, to) => {
   buildMenus().then(res => {
-    const asyncRouter =filterAsyncRouter(res)
+    const asyncRouter = filterAsyncRouter(res)
     asyncRouter.push({
       path: '*',
       redirect: '/404',
