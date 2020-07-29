@@ -9,7 +9,7 @@ import 'nprogress/nprogress.css'    //进度条样式
 import router from './routers'    //导入路由
 import Config from '@/settings'   //导入全局配置
 import {getToken} from "../utils/auth"; //导入获取token方法
-import Store from "../store";   //导入vuex
+import store from "../store";   //导入vuex
 import {buildMenus} from "../api/system/menu";
 import { filterAsyncRouter } from '@/store/modules/permission'
 
@@ -31,18 +31,18 @@ router.beforeEach((to, from, next) => {
       next({path: '/'})   //进入主页
       NProgress.done()
     }else {
-      if (Store.getters.roles.length === 0) { //如果还未拉取到用户信息
-        /*Store.dispatch('GetInfo').then(res => {   //调用store的action异步拉取用户信息
+      if (store.getters.roles.length === 0) { //如果还未拉取到用户信息
+        store.dispatch('GetInfo').then(res => {   //调用store的action异步拉取用户信息
           //动态路由，拉取菜单
           loadMenus(next, to)
         }).catch(err => {
-          Store.dispatch('LogOut').then(() => {
+          store.dispatch('LogOut').then(() => {
             location.reload()
           })
-        })*/
-      }else if (Store.getters.loadMenus) {
+        })
+      }else if (store.getters.loadMenus) {
         // 通过转发到user.js的action并提交修改加载菜单请求为false，防止死循环
-        Store.dispatch('updateLoadMenus').then(res => {})
+        store.dispatch('updateLoadMenus').then(res => {})
         //加载菜单
         loadMenus(next, to)
       } else {
