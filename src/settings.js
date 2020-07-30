@@ -37,7 +37,7 @@ module.exports = {
   /**
    *  是否显示logo
    */
-  sidebarLog: true,
+  sidebarLogo: true,
   /**
    *  是否显示底部信息
    */

@@ -24,7 +24,6 @@ router.beforeEach((to, from, next) => {
   }
   NProgress.start()
   if(getToken()) {
-    console.log('=================')
 
     //已登录，且要跳转的页面是登录页
     if (to.path === '/login'){
@@ -40,9 +39,9 @@ router.beforeEach((to, from, next) => {
             location.reload()
           })
         })
-      }else if (store.getters.loadMenus) {
+      }else if (store.getters.loadMenus) {  //如果vuex已经存在了菜单的相关信息，则关闭加载菜单请求
         // 通过转发到user.js的action并提交修改加载菜单请求为false，防止死循环
-        store.dispatch('updateLoadMenus').then(res => {})
+        store.dispatch('updateLoadMenus').then(res => {}) //关闭加载菜单请求
         //加载菜单
         loadMenus(next, to)
       } else {
@@ -50,7 +49,6 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {    //没有token时
-    console.log('++++++++++++++++')
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       //console.log('from.path -------- ' + from.path)
       //console.log('to.path +++++++++++' + to.path)
@@ -67,13 +65,14 @@ router.beforeEach((to, from, next) => {
 //从后台获取用户下的菜单
 export const loadMenus = (next, to) => {
   buildMenus().then(res => {
+    //拿到组件数组
     const asyncRouter = filterAsyncRouter(res)
     asyncRouter.push({
       path: '*',
       redirect: '/404',
       hidden: true
     })
-    store.dispatch('GenerateRoutes', asyncRouter).then(() => {
+    store.dispatch('GenerateRoutes', asyncRouter).then(() => {  //将组件路由信息放入vuex
       router.addRoutes(asyncRouter) // 动态添加可访问路由表
       next({ ...to, replace: true })
     })

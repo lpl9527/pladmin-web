@@ -12,6 +12,7 @@ const getters = {   //getters相当于计算属性。特别注意： 如果gette
   roles: state => state.user.roles,
   user: state => state.user.user,
   loadMenus: state => state.user.loadMenus,
+  permission_routers: state => state.permission.routers,  //设置路由菜单
   routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
   socketApi: state => state.api.socketApi,
