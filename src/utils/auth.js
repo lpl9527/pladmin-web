@@ -23,8 +23,10 @@ export function getToken() {
  * @returns {*}
  */
 export function setToken(token, rememberMe) {
-  if (rememberMe){
+  if (rememberMe){  //当选择了记住我时就设置token的过期时间
     return Cookies.set(tokenKey, token, {expires: Config.tokenCookieExpires})
+  }else {
+    return Cookies.set(tokenKey, token)
   }
 }
 
