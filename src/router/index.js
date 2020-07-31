@@ -13,6 +13,8 @@ import store from "../store";   //导入vuex
 import {buildMenus} from "../api/system/menu";
 import { filterAsyncRouter } from '@/store/modules/permission'
 
+NProgress.configure({ showSpinner: false })
+
 
 const whiteList = ['/login']    //不重定向到登录页的请求路径
 
@@ -35,6 +37,7 @@ router.beforeEach((to, from, next) => {
           //动态路由，拉取菜单
           loadMenus(next, to)
         }).catch(err => {
+          console.log(err)
           store.dispatch('LogOut').then(() => {
             location.reload()
           })
@@ -54,8 +57,8 @@ router.beforeEach((to, from, next) => {
       //console.log('to.path +++++++++++' + to.path)
       next()    //如果已经重定向到登录页就放行
     } else {
-      console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
-      console.log(`++++++++++++++++++to redirect=${to.fullPath}`)
+      /*console.log(`++++++++++++++++++from redirect=${from.fullPath}`)
+      console.log(`++++++++++++++++++to redirect=${to.fullPath}`)*/
       next(`/login?redirect=${to.fullPath}`) // 否则全部重定向到登录页
       NProgress.done()
     }

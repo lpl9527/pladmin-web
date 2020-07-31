@@ -33,7 +33,6 @@ const user = {
         login(userInfo.username, userInfo.password, userInfo.code, userInfo.uuid).then(res => {
           //登录成功设置token
           setToken(res.token, rememberMe)
-          console.log('3333333333333')
           commit('SET_TOKEN', res.token)    //登录成功，将token放入state
           setUserInfo(res.user, commit)
           // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js

@@ -5,7 +5,11 @@
       <sidebar class="sidebar-container"/>
       <!--中间主体内容区域-->
       <div :class="{hasTagsView: needTagsView}" class="main-container">
-
+        <div :class="{'fixed-header':fixedHeader}">
+          <!--导航条-->
+        </div>
+        <!--主体内容区域-->
+        <app-main />
       </div>
     </div>
 </template>
@@ -16,13 +20,14 @@
   import ResizeMixin from './mixin/ResizeHandler' //切换设备改变sidebar并设置大小
   import Cookies from 'js-cookie'
 
-  import {Sidebar} from './components'
+  import {Sidebar, AppMain} from './components'
 
 	export default {
 		name: "index",
     mixins: [ResizeMixin],    //引入公共样式
     components : {
-      Sidebar   //左侧导航栏组件
+      Sidebar,   //左侧导航栏组件
+      AppMain   //主体内容
     },
     computed: {
 		  ...mapState({
