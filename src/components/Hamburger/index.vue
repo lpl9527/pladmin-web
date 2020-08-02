@@ -14,14 +14,14 @@
 	export default {
 		name: "Hamburger",
     props: {
-		  isActive: {   //汉堡是否被激活，由父组件指定控制样式
+		  isActive: {   //汉堡是否被激活，由父组件指定控制样式，由Navbar组件指定
 		    type: Boolean,
         default: false
       }
     },
     methods: {
 		  toggleClick() {
-		    //当点击汉堡时将当前方法发射传递到父组件，用于父组件隐藏或展示菜单的切换
+		    //当点击汉堡时将当前方法发射传递到父组件，用于父组件Navbar隐藏或展示菜单的切换（数据子传父，并在父组件修改相应state）
 		    this.$emit('toggleClick')
       }
     }

@@ -45,7 +45,7 @@ module.exports = {
   /**
    *  底部信息，支持html语法
    */
-  footerText: '© 2020 lpl <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License 2.0</a>',
+  footerTxt: '© 2020 lpl <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License 2.0</a>',
   /**
    * 备案号
    */

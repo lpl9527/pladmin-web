@@ -24,7 +24,7 @@
   import SidebarItem from './SidebarItem'
 
 	export default {
-		name: "index",
+		name: "Sidebar",
     components: {
 		  Logo,
       SidebarItem
