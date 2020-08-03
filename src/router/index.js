@@ -76,8 +76,6 @@ export const loadMenus = (next, to) => {
     })
     store.dispatch('GenerateRoutes', asyncRouter).then(() => {  //将组件路由信息放入vuex
       router.addRoutes(asyncRouter) // 动态添加可访问路由表
-      console.log('+++++++++++++')
-      console.log(asyncRouter)
       next({ ...to, replace: true })
     })
   })

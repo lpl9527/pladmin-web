@@ -9,6 +9,7 @@
           <!--导航条-->
           <navbar />
           <!--标签视图-->
+          <tags-view />
         </div>
         <!--主体内容区域-->
         <app-main />
@@ -22,15 +23,16 @@
   import ResizeMixin from './mixin/ResizeHandler' //切换设备改变sidebar并设置大小
   import Cookies from 'js-cookie'
 
-  import {Sidebar, AppMain, Navbar} from './components'
+  import {Sidebar, AppMain, Navbar, TagsView} from './components'
 
 	export default {
 		name: "Layout",
     mixins: [ResizeMixin],    //引入公共样式
     components : {
-      Sidebar,   //左侧导航栏组件
-      AppMain,   //主体内容
-      Navbar     //导航条
+      Sidebar,    //左侧导航栏组件
+      AppMain,    //主体内容
+      Navbar,     //导航条
+      TagsView    //标签视图
     },
     computed: {
 		  ...mapState({

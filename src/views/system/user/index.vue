@@ -1,10 +1,12 @@
 <template>
-    <div>用户管理</div>
+    <div>
+      <h2>用户管理</h2>
+    </div>
 </template>
 
 <script>
 	export default {
-		name: "index"
+		name: "user"
 	}
 </script>
 

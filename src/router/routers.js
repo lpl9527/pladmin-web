@@ -17,7 +17,6 @@ export const constantRouterMap = [
   },
   {
     path: '/user',   //进入个人中心页面
-    meta: { title: '个人中心', noCache: true },
     component: Layout,
     hidden: true,
     redirect: 'noredirect',   //不能点击跳转
@@ -26,7 +25,7 @@ export const constantRouterMap = [
         path: 'center',
         component: (resolve) => require(['@/views/system/user/center'], resolve),
         name: '个人中心',
-        meta: {title: '个人中心', icon: 'user'}
+        meta: {title: '个人中心'}
       }
     ]
   },
@@ -56,6 +55,12 @@ export const constantRouterMap = [
   }
 
 ]
+
+// 解决ElementUI导航栏中的vue-router在3.0版本以上重复点菜单报错问题
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 //导出路由
 export default new Router({
