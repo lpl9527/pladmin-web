@@ -15,6 +15,21 @@ export const constantRouterMap = [
     component: (resolve) => require(['@/views/login'], resolve),
     hidden: true
   },
+  {
+    path: '/user',   //进入个人中心页面
+    meta: { title: '个人中心', noCache: true },
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',   //不能点击跳转
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/system/user/center'], resolve),
+        name: '个人中心',
+        meta: {title: '个人中心', icon: 'user'}
+      }
+    ]
+  },
   {       //转到首页
     path: '/',
     component: Layout,
@@ -25,6 +40,17 @@ export const constantRouterMap = [
         component: (resolve) => require(['@/views/home'], resolve),
         name: 'Dashboard',
         meta: { title: '首页', icon: 'index', affix: true, noCache: true }
+      }
+    ]
+  },
+  {     //重定向到动态路由地址
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [   //其它路由地址都是作为Layout的子菜单的形式进行展示的
+      {
+        path: '/redirect/:path*',
+        component: (resolve) => require(['@/views/features/redirect'], resolve)
       }
     ]
   }

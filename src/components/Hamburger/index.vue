@@ -1,6 +1,5 @@
 <!--
     汉堡样式组件，用于点击实现左侧菜单的折叠与展开-->
-
 <template>
   <div style="padding: 0 15px;" @click="toggleClick">
     <!--指定svg汉堡图标-->

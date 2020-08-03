@@ -34,8 +34,6 @@ const user = {
           //登录成功设置token
           setToken(res.token, rememberMe)
           commit('SET_TOKEN', res.token)    //登录成功，将token放入state
-          console.log('+++++++++++++++++++')
-          console.log(res.user)
           setUserInfo(res.user, commit)
           // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
           commit('SET_LOAD_MENUS', true)
@@ -49,8 +47,6 @@ const user = {
     GetInfo({commit}) {
       return new Promise((resolve, reject) => {
         getInfo().then(res => {
-          console.log('-----------------')
-          console.log(res.user)
           setUserInfo(res, commit)
           resolve(res)    //成功拿到用户信息
         }).catch(err => {

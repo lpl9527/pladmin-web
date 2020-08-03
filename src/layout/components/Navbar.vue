@@ -33,7 +33,7 @@
               布局设置
             </el-dropdown-item>
           </span>
-          <router-link to="/user/center">
+          <router-link to="/user/center">   <!--如果没有此路由就会报maxmum call stack over异常-->
             <el-dropdown-item>
               个人中心
             </el-dropdown-item>
@@ -51,8 +51,10 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import Breadcrumb from '@/components/Breadcrumb'
+
+  //引入一些公用组件
   import Hamburger from '@/components/Hamburger'
+  import Breadcrumb from '@/components/Breadcrumb'
   import Doc from '@/components/Doc'
   import Screenfull from '@/components/Screenfull'
   import SizeSelect from '@/components/SizeSelect'
@@ -61,8 +63,8 @@
 
   export default {
     components: {
-      Breadcrumb,
       Hamburger,
+      Breadcrumb,
       Screenfull,
       SizeSelect,
       Search,

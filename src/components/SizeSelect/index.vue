@@ -38,7 +38,7 @@
         //刷新页面
         this.refreshView()
         this.$message({
-          message: '布局设置成功',
+          message: '布局大小设置成功',
           type: 'success'
         })
       },

@@ -13,7 +13,7 @@
 
 <script>
 
-  import Fuse from 'fuse.js'   //apache开源的轻量级模糊搜索，安装 npm install --save fuse.js
+  import Fuse from 'fuse.js'   //apache开源的轻量级模糊搜索，安装 npm install --save fuse.js  特别注意：fuse.js版本是3.4.4
   import path from 'path'
 
 	export default {
@@ -28,14 +28,14 @@
       }
     },
     computed: {
-		  routers() {   //获取菜单路由列表
+		  routes() {   //获取菜单路由列表
 		    return this.$store.state.permission.routers
       }
     },
     watch: {
 		  routes() {
 		    //解析当前路由地址，并将结果放入搜索池中
-		    this.searchPool = this.generateRoutes(this.routes())
+		    this.searchPool = this.generateRoutes(this.routes)
       },
       searchPool(list) {
 		    this.initFuse(list)
@@ -135,6 +135,7 @@
 	}
 </script>
 
+
 <style lang="scss" scoped>
   .header-search {
     font-size: 0 !important;
@@ -155,7 +156,7 @@
       display: inline-block;
       vertical-align: middle;
 
-      .el-input__inner {
+      ::v-deep .el-input__inner {
         border-radius: 0;
         border: 0;
         padding-left: 0;

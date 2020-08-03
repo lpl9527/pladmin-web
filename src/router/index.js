@@ -37,7 +37,6 @@ router.beforeEach((to, from, next) => {
           //动态路由，拉取菜单
           loadMenus(next, to)
         }).catch(err => {
-          console.log(err)
           store.dispatch('LogOut').then(() => {
             location.reload()
           })
@@ -77,6 +76,8 @@ export const loadMenus = (next, to) => {
     })
     store.dispatch('GenerateRoutes', asyncRouter).then(() => {  //将组件路由信息放入vuex
       router.addRoutes(asyncRouter) // 动态添加可访问路由表
+      console.log('+++++++++++++')
+      console.log(asyncRouter)
       next({ ...to, replace: true })
     })
   })
