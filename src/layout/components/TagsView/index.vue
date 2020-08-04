@@ -69,7 +69,7 @@
     },
     methods: {
       isActive(route) {   //判断视图是否活跃（即路由地址是否与当前路由地址相同）
-        return route.path === this.$router.path
+        return route.path === this.$route.path
       },
       filterAffixTags(routes, basePath = '/') {   //过滤附加标签（存在的则加入）
         let tags = []
