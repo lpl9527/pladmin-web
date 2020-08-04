@@ -1,18 +1,29 @@
 <template>
     <div :class="classObj" class="app-wrapper">
-      <div v-if="device==='mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+      <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
       <!--左侧菜单栏-->
       <sidebar class="sidebar-container"/>
       <!--中间主体内容区域-->
       <div :class="{hasTagsView: needTagsView}" class="main-container">
+
         <div :class="{'fixed-header':fixedHeader}">
           <!--导航条-->
           <navbar />
           <!--标签视图-->
-          <tags-view />
+          <tags-view v-if="needTagsView"/>
         </div>
+
         <!--主体内容区域-->
         <app-main />
+
+        <!--右侧控制面板-->
+        <right-panel v-if="showSettings">
+          <!--全局设置-->
+          <settings />
+        </right-panel>
+
+        <!--防止刷新后丢失-->
+        <theme v-show="false" ref="theme" />
       </div>
     </div>
 </template>
@@ -23,16 +34,21 @@
   import ResizeMixin from './mixin/ResizeHandler' //切换设备改变sidebar并设置大小
   import Cookies from 'js-cookie'
 
-  import {Sidebar, AppMain, Navbar, TagsView} from './components'
+  import {Sidebar, AppMain, Navbar, TagsView, Settings} from './components'   //导入全局布局组件
+  import Theme from '@/components/ThemePicker'    //布局主题选择
+  import RightPanel from '@/components/RightPanel'    //右侧全局设置面板
 
 	export default {
 		name: "Layout",
     mixins: [ResizeMixin],    //引入公共样式
-    components : {
+    components: {
       Sidebar,    //左侧导航栏组件
       AppMain,    //主体内容
       Navbar,     //导航条
-      TagsView    //标签视图
+      TagsView,   //标签视图
+      Theme,      //主题
+      RightPanel, //右侧面板
+      Settings    //全局设置
     },
     computed: {
 		  ...mapState({

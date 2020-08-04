@@ -13,7 +13,8 @@
 
   //获取element-ui的版本
   const version = require('element-ui/package.json').version
-  const ORGINAL_THEME = '#409EFF'   //设置默认主题色
+  const ORIGINAL_THEME = '#409EFF'   //设置默认主题色
+
 	export default {
 		name: "ThemePicker",
     data() {

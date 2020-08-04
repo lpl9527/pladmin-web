@@ -38,7 +38,7 @@
               个人中心
             </el-dropdown-item>
           </router-link>
-          <span style="display:block;" @click="open">
+          <span style="display:block;" @click="logout">
             <el-dropdown-item divided>
               退出登录
             </el-dropdown-item>
@@ -99,18 +99,16 @@
       toggleSideBar() {
         this.$store.dispatch('app/toggleSideBar')
       },
-      open() {
+      logout() {
         this.$confirm('确定注销并退出系统吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.logout()
-        })
-      },
-      logout() {
-        this.$store.dispatch('LogOut').then(() => {
-          location.reload()
+          this.$store.dispatch('LogOut').then(() => {
+            location.reload()
+          })
+        }).catch(err => {
         })
       }
     }
