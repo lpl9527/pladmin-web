@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import Logo from '@/assets/images/logo.jpg'   //导入logo图片
+  import Logo from '@/assets/images/logo.png'   //导入logo图片
 
 	export default {
 		name: "SidebarLogo",
