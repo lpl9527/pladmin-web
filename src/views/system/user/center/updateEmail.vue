@@ -25,12 +25,14 @@
 
 <script>
 
-
+  import store from '@/store'
+  import { validEmail } from '@/utils/validate'   //邮箱校验
+  import { sendEmailCode } from '@/api/system/code'   //发送验证码
 
 	export default {
 		name: "updateEmail",
     props: {
-		  email: {
+		  email: {    //存放的是父组件传来的用户当前的邮箱
 		    type: String,
         required: true
       }
@@ -41,7 +43,7 @@
 		      callback(new Error('新邮箱不能为空'))
         }else if (value === this.email){
 		      callback(new Error('新邮箱不能与旧邮箱相同'))
-        }else if(validMail(value)) {
+        }else if(validEmail(value)) {
 		      callback()
         }else {
 		      callback(new Error('邮箱格式错误'))
@@ -91,9 +93,39 @@
         this.form = {email: '', code: '', pass: ''}
       },
       sendCode() {
-		    this.codeLoading = true
-        this.buttonName = '验证码发送中'
-        const _this = this
+		    //如果表单邮箱不为空且不等于用户当前邮箱才发送验证码
+		    if (this.form.email && this.form.email !== this.email) {
+          this.codeLoading = true
+          this.buttonName = '验证码发送中'
+          const _this = this
+          //发送验证码
+          sendEmailCode(this.form.email).then(res => {
+            this.$message({
+              showClose: true,
+              message: '发送成功，验证码有效期5分钟',
+              type: 'success'
+            })
+            this.codeLoading = false    //去除加载中
+            this.isDisabled = true      //禁用验证码发送按钮
+            this.buttonName = this.time-- + '秒后重新发送'    //发送按钮名称
+            //计时器
+            this.timer = window.setInterval(function () {
+              _this.buttonName = _this.time + '秒后重新发送'
+              --_this.time
+              if (_this.time < 0) {
+                _this.buttonName = '重新发送'
+                _this.time = 60
+                _this.isDisabled = false
+                window.clearInterval(_this.timer)
+              }
+            }, 1000)
+          }).catch(err => {
+            this.resetForm()
+            this.codeLoading = false
+            //console.log(err.response.data.message)
+          })
+        }
+
       },
       doSubmit() {    //修改邮箱
 		    console.log('提交表单')
