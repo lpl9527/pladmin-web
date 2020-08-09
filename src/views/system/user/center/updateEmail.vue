@@ -26,8 +26,9 @@
 <script>
 
   import store from '@/store'
-  import { validEmail } from '@/utils/validate'   //邮箱校验
+  import { validEmail } from '@/utils/validate'       //邮箱校验
   import { sendEmailCode } from '@/api/system/code'   //发送验证码
+  import { updateEmail } from '@/api/system/user'     //更新邮箱
 
 	export default {
 		name: "updateEmail",
@@ -128,7 +129,28 @@
 
       },
       doSubmit() {    //修改邮箱
-		    console.log('提交表单')
+		    this.$refs['form'].validate((valid) => {
+		      if (valid) {
+		        this.loading = true
+            //更新邮件
+            updateEmail(this.form).then(res => {
+              this.loading = false  //关闭加载
+              this.resetForm()      //清空表单
+              this.$notify({
+                title: '邮箱修改成功',
+                type: 'success',
+                duration: 1500
+              })
+              //重新拉取用户信息
+              store.dispatch('GetInfo').then(() => {})
+            }).catch(err => {
+              this.loading = false
+              console.log(err.response.data.message)
+            })
+          }else {
+		        return false
+          }
+        })
       }
     }
 	}
