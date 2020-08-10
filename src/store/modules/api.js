@@ -1,4 +1,5 @@
-const baseUrl = process.env.VUE_APP_BASE_API
+//const baseUrl = process.env.VUE_APP_BASE_API
+const baseUrl = 'http://59.110.154.99:800'
 const api = {
   state: {
     // 部署包上传
