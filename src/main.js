@@ -23,18 +23,23 @@ import 'echarts-gl'   //引入echarts-gl三维散点图，安装： npm install 
 
 import './router'   //导入router权限控制
 
+import permission from './components/Permission'  //导入权限指令
+import dict from './components/Dict'    //导入数据字典
+
 //还需要安装的插件：
 // sass解析scss样式文件：npm install --save-dev node-sass sass-loader  。若出现报错：更新数据源重试：npm config set sass_binary_site=https://npm.taobao.org/mirrors/node-sass
 
 
-Vue.config.productionTip = false
-
-//使用插件
+//使用插件或指令
 Vue.use(VueHighlightJS)
 Vue.use(mavonEditor)
+Vue.use(permission)
+Vue.use(dict)
 Vue.use(Element, {
   size: Cookies.get('size') || 'small'  //设置element ui默认大小
 })
+
+Vue.config.productionTip = false
 
 new Vue({
   router,

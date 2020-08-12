@@ -51,3 +51,46 @@ export function editUser(data) {
     data
   })
 }
+//--------------------用户管理增删改查方法，函数名称不能随意更改，与crud封装的方法保持一致
+
+/**
+ * 新增用户
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function add(data) {
+  return request({
+    url: 'api/users',
+    method: 'post',
+    data
+  })
+}
+
+export default {add, edit, del}
+
+/**
+ * 根据id批量删除用户
+ * @param ids
+ * @returns {AxiosPromise}
+ */
+export function del(ids) {
+  return request({
+    url: 'api/users',
+    method: 'delete',
+    data: ids
+  })
+}
+
+/**
+ * 编辑用户
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function edit(data) {
+  return request({
+    url: 'api/users',
+    method: 'put',
+    data
+  })
+}
+
