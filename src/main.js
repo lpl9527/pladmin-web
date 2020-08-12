@@ -5,7 +5,7 @@ import store from "./store";
 
 import Cookies from 'js-cookie'   //使用Cookie工具，安装： npm install --save js-cookie
 
-import 'normalize.css/normalize.css'    //使用normalize.css解决跨浏览器的样式一致性，安装： npm install --save-dev normalize.css
+import 'normalize.css/normalize.css'    //使用normalize.css解决跨浏览器的样式一致性，安装： npm install --save normalize.css
 
 import Element from 'element-ui'    //使用element-ui库
 

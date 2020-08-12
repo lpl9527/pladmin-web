@@ -3,7 +3,7 @@
       <el-row :gutter="20">
         <!--左侧部门数据-->
         <el-col :xs="9" :sm="6" :md="5" :lg="4" :xl="4">
-          <div class="header-container">
+          <div class="head-container">
             <el-input v-model="deptName" clearable size="small" placeholder="输入部门名称搜索" prefix-icon="el-icon-search" class="filter-item" @input="getDeptDatas" />
           </div>
           <el-tree :data="deptDatas" :load="getDeptDatas" :props="defaultProps" :expand-on-click-node="false" lazy @node-click="handleNodeClick" />
@@ -11,13 +11,64 @@
         <!--用户数据-->
         <el-col :xs="15" :sm="18" :md="19" :lg="20" :xl="20">
           <!--用户工具栏-->
-          <div class="header-container">
+          <div class="head-container">
+            <!--增、改表单渲染-->
+            <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="600px">
+              <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="66px">
+                <el-form-item label="用户名" prop="username">
+                  <el-input v-model="form.username" />
+                </el-form-item>
+                <el-form-item label="电话" prop="phone">
+                  <el-input v-model.number="form.phone" />
+                </el-form-item>
+                <el-form-item label="昵称" prop="nickName">
+                  <el-input v-model="form.nickName" />
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                  <el-input v-model="form.email" />
+                </el-form-item>
+                <el-form-item label="部门" prop="dept.id">
+                  <treeselect v-model="form.dept.id" :options="depts" :load-options="loadDepts" style="width: 178px" placeholder="选择部门" />
+                </el-form-item>
+                <el-form-item label="岗位" prop="jobs">
+                  <el-select v-model="form.jobs" style="width: 178px;" multiple placeholder="请选择" @remove-tag="deleteTag" @change="changeJob">
+                    <el-option v-for="item in jobs" :key="item.name" :label="item.name" :value="item.id" />
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="性别">
+                  <el-radio-group v-model="form.gender" style="width: 178px">
+                    <el-radio label="男">男</el-radio>
+                    <el-radio label="女">女</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item label="状态">
+                  <el-radio-group v-model="form.enabled" :disabled="form.id === user.id">
+                    <el-radio v-for="item in dict.user_status" :key="item.id" :label="item.value">{{ item.label }}</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                <el-form-item style="margin-bottom: 0;" label="角色" prop="roles">
+                  <el-select v-model="form.roles" style="width: 437px" multiple placeholder="请选择" @remove-tag="deleteTag" @change="changeRole">
+                    <el-option v-for="item in roles" :key="item.name" :disabled="level !== 1 && item.level <= level" :label="item.name" :value="item.id" />
+                  </el-select>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button type="text" @click="crud.cancelCU">取消</el-button>
+                <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+              </div>
+            </el-dialog>
             <!--搜索框-->
             <div v-if="crud.props.searchToggle">
               <!--搜索框-->
               <el-input v-model="query.blurry" clearable size="small" placeholder="输入名称或者邮箱搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
               <!--日期时间选择器-->
               <date-range-picker v-model="query.createTime" class="date-item" />
+              <!--用户状态-->
+              <el-select v-model="query.enabled" clearable size="small" placeholder="状态" class="filter-item" style="width: 90px;" @change="crud.toQuery">
+                <el-option v-for="item in enabledTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+              </el-select>
+
+              <rr-operation />
             </div>
             <!--增删改查工具条-->
             <crud-operation show="" :permission="permission" />
@@ -37,13 +88,7 @@
             </el-table-column>
             <el-table-column prop="enabled" align="center" label="状态">
               <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enabled"
-                  :disabled="user.id === scope.row.id"
-                  active-color="#409EFF"
-                  inactive-color="#F56C6C"
-                  @change="changeEnabled(scope.row, scope.row.enabled)"
-                />
+                <el-switch v-model="scope.row.enabled" :disabled="user.id === scope.row.id" active-color="#409EFF" inactive-color="#F56C6C" @change="changeEnabled(scope.row, scope.row.enabled)"  />
               </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" prop="createTime" width="135" label="创建日期">
@@ -69,6 +114,7 @@
 
   import { getDepts,getDeptSuperior } from "../../../api/system/dept";  //部门相关api
   import crudUser from '../../../api/system/user'
+  import { isValidPhone } from "../../../utils/validate";   //验证手机号格式
 
   import DateRangePicker from '@/components/DateRangePicker'    //引入日期时间选择器
 
@@ -78,7 +124,7 @@
   import udOperation from '@crud/UD.operation'
   import pagination from '@crud/Pagination'
 
-  import TreeSelect from '@riophae/vue-treeselect'  //安装： npm install --save @riophae/vue-treeselect
+  import Treeselect from '@riophae/vue-treeselect'  //安装： npm install --save @riophae/vue-treeselect
   import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
   import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -97,7 +143,7 @@
 		name: "User",
     components: {
       DateRangePicker,
-      TreeSelect,
+      Treeselect,
       rrOperation,
       crudOperation,
       udOperation,
@@ -109,6 +155,16 @@
     mixins: [presenter(), header(), form(defaultForm), crud()],   //混入增删改查组件
     dicts: ['user_status'],
     data() {
+		  //自定义手机号验证
+      const validPhone = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error('请输入电话号码'))
+        }else if(!isValidPhone(value)) {
+          callback(new Error('请输入正确的11位手机号码'))
+        }else {
+          callback()
+        }
+      }
 		  return {
         height: document.documentElement.clientHeight - 180 + 'px;',
 		    deptName: '',
@@ -122,6 +178,27 @@
           add: ['admin', 'user:add'],
           edit: ['admin', 'user:edit'],
           del: ['admin', 'user:del']
+        },
+        enabledTypeOptions: [
+          { key: 'true', display_name: '激活' },
+          { key: 'false', display_name: '锁定' }
+        ],
+        rules: {
+          username: [
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          ],
+          nickName: [
+            { required: true, message: '请输入用户昵称', trigger: 'blur' },
+            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          ],
+          email: [
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+          ],
+          phone: [
+            { required: true, trigger: 'blur', validator: validPhone }
+          ]
         }
       }
     },
@@ -186,6 +263,46 @@
           data.enabled = !data.enabled
         })
       },
+      //获取部门数据
+      loadDepts({action, parentNode, callback}) {
+		    if (action === LOAD_CHILDREN_OPTIONS) {
+          getDepts({ enabled: true, pid: parentNode.id }).then(res => {
+            parentNode.children = res.content.map(function(obj) {
+              if (obj.hasChildren) {
+                obj.children = null
+              }
+              return obj
+            })
+            setTimeout(() => {
+              callback()
+            }, 200)
+          })
+        }
+      },
+      //删除用户角色
+      deleteTag(value) {
+		    userRoles.forEach(function (data, index) {
+          if (data.id === value) {
+            userRoles.splice(index, value)
+          }
+        })
+      },
+      //改变用户角色
+      changeRole(value) {
+		    userRoles = []
+        value.forEach(function(data, index) {
+          const role = { id: data }
+          userRoles.push(role)
+        })
+      },
+      //改变用户岗位
+      changeJob(value) {
+        userJobs = []
+        value.forEach(function(data, index) {
+          const job = { id: data }
+          userJobs.push(job)
+        })
+      },
     }
 	}
 </script>
@@ -196,8 +313,9 @@
     height: 30px;
     line-height: 30px;
   }
-  .header-container {
+  /*.header-container {
     padding-bottom: 10px;
-  }
+  }*/
+
 </style>
 
