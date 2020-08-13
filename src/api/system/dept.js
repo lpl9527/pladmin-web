@@ -16,7 +16,7 @@ export function getDepts(params) {
 }
 
 /**
- * 根据部门id数组获取部门数据
+ * 根据部门id获取同级及上级部门树形数据
  * @param ids
  * @returns {AxiosPromise}
  */

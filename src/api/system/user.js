@@ -66,8 +66,6 @@ export function add(data) {
   })
 }
 
-export default {add, edit, del}
-
 /**
  * 根据id批量删除用户
  * @param ids
@@ -94,3 +92,4 @@ export function edit(data) {
   })
 }
 
+export default {add, edit, del}
