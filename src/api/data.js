@@ -26,7 +26,7 @@ export function initData(url, params) {
  */
 export function download(url, params) {
   return request({
-    utl: url + '?' + qs.stringify(params, {indices: false}),
+    url: url + '?' + qs.stringify(params, {indices: false}),
     method: 'get',
     responseType: 'blob'
   })

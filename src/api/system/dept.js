@@ -28,5 +28,45 @@ export function getDeptSuperior(ids) {
     method: 'post',
     data
   })
-
 }
+
+/**
+ * 添加部门
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function add(data) {
+  return request({
+    url: 'api/dept',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 删除部门
+ * @param ids
+ * @returns {AxiosPromise}
+ */
+export function del(ids) {
+  return request({
+    url: 'api/dept',
+    method: 'delete',
+    data: ids
+  })
+}
+
+/**
+ * 编辑部门
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function edit(data) {
+  return request({
+    url: 'api/dept',
+    method: 'put',
+    data
+  })
+}
+
+export default { add, del, edit, getDepts, getDeptSuperior }
