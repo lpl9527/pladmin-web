@@ -160,6 +160,13 @@
           })
         })
       },
+      getSupDepts(id) {
+        crudDept.getDeptSuperior(id).then(res => {
+          const date = res.content
+          this.buildDepts(date)
+          this.depts = date
+        })
+      },
       buildDepts(depts) {
         depts.forEach(data => {
           if (data.children) {
