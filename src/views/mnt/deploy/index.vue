@@ -192,9 +192,6 @@
           this.servers = res.content
         })
       },
-      sysRestore() {
-        this.$refs.sysRestore.dialog = true
-      },
       //-----------------------------------------------------------
       [CRUD.HOOK.beforeRefresh]() {
         this.selectIndex = ''
