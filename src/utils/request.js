@@ -13,7 +13,7 @@ import router from '@/router/routers'
 //创建axios实例
 const request = axios.create({    //设置基础选项
   //baseURL: process.env.ENV === 'production' ? process.env.VUE_APP_BASE_API :'/',  //api的baseUrl
-  baseURL: 'http://localhost:8000',
+  baseURL: 'http://129.211.171.112:9000',
   timeout: Config.timeout    //设置超时时间
 })
 

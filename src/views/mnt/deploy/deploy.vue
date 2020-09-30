@@ -150,6 +150,7 @@
       },
       initWebSocket() {
         const wsUri = process.env.VUE_APP_WS_API + '/webSocket/deploy'
+        //const wsUri = 'ws://129.211.171.112:9000/webSocket/deploy'
         this.websock = new WebSocket(wsUri)
         this.websock.onerror = this.webSocketOnError
         this.websock.onmessage = this.webSocketOnMessage
