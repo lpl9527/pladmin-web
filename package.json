@@ -21,7 +21,7 @@
     "normalize.css": "7.0.0",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^6.1.0",
-    "qs": "^6.9.1",
+    "qs": "^6.9.7",
     "screenfull": "^5.0.2",
     "sortablejs": "1.8.4",
     "vue": "^2.6.11",
